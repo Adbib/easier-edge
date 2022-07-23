@@ -195,6 +195,12 @@ router.get("/auth/callback", async (req, res) => {
     ); // req.query must be cast to unkown and then AuthQuery in order to be accepted
     ACTIVE_SHOPIFY_SHOPS[req.query.shop] = session;
     console.log("session", session);
+    const addtodb = new Stores({
+      shop: session.shop,
+      accessToken: session.accessToken,
+    });
+    await addtodb.save();
+    console.log("addtodb", addtodb);
     const sendIt = await axios({
       method: "post",
       url: "https://" + bla + "/api/shopify/new",
@@ -202,12 +208,8 @@ router.get("/auth/callback", async (req, res) => {
         session,
       },
     });
-    console.log(sendIt.data);
-    const addtodb = new Stores({
-      shop: session.shop,
-      accessToken: session.accessToken,
-    });
-    await addtodb.save();
+
+    console.log("sendIt.data", sendIt.data);
   } catch (error) {
     console.error(error); // in practice these should be handled more gracefully
   }
