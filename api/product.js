@@ -20,7 +20,7 @@ let encodeUrl = parseUrl.urlencoded({ extended: false });
 const router = require("express").Router();
 // const { API_KEY, API_SECRET_KEY, SCOPES, HOST_SCHEME } = process.env;
 // const SHOP = "yadwp.myshopify.com";
-const HOST = "easier.yadbib.me";
+const HOST = "easier-app.herokuapp.com";
 Shopify.Context.initialize({
   API_KEY: "6ad4cdb5c161c980d12206140bd2efe3",
   API_SECRET_KEY: "2f4832ea58389bccddaa43561fc1ab00",
@@ -172,7 +172,7 @@ router.get("/:plat/auth", async (req, res) => {
     req,
     res,
     req.query.shop,
-    "/api/shopify/auth/callback" + req.params.plat,
+    "/api/shopify/auth/callback?platform" + req.params.plat,
     false
   );
   // console.log(req.query.shop);
