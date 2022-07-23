@@ -175,6 +175,7 @@ router.get("/:plat/auth", async (req, res) => {
     `/api/shopify/auth/callback/${req.params.plat}`,
     false
   );
+  console.log("authRoute", authRoute);
   // console.log(req.query.shop);
   // console.log(authRoute);
   return res.redirect(authRoute);
