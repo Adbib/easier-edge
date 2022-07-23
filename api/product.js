@@ -156,14 +156,18 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/platform", encodeUrl, (req, res) => {
-  // console.log(req.body.shop);
+  console.log(req.body);
   if (ACTIVE_SHOPIFY_SHOPS[req.body.shop] === undefined) {
-    res.redirect(`/api/shopify/${req.body.platform}/auth`);
+    console.log("store not found", req.body.platform);
+    const inurl = req.body.platform;
+    res.redirect(`/api/shopify/${inurl}/auth`);
   } else {
     res.send("Hello world!");
   }
 });
 router.get("/:plat/auth", async (req, res) => {
+  console.log("query", req.query);
+  console.log("params", req.params);
   let authRoute = await Shopify.Auth.beginAuth(
     req,
     res,
