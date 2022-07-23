@@ -1,16 +1,22 @@
-// const Stores = require("../models/Stores");
+const Stores = require("../models/Stores");
 const {
   Shopify,
   ApiVersion,
   getCurrentSessionId,
   LATEST_API_VERSION,
 } = require("@shopify/shopify-api");
+var fs = require("fs");
 // const {
 //   verifyToken,
 //   verifyTokenAndAuthorization,
 //   verifyTokenAndAdmin,
 // } = require("./verifyToken");
+// const Transform = require("stream").Transform;
+// const parser = new Transform();
+// const newLineStream = require("new-line");
+var parseUrl = require("body-parser");
 
+let encodeUrl = parseUrl.urlencoded({ extended: false });
 const router = require("express").Router();
 // const { API_KEY, API_SECRET_KEY, SCOPES, HOST_SCHEME } = process.env;
 // const SHOP = "yadwp.myshopify.com";
@@ -28,6 +34,14 @@ Shopify.Context.initialize({
 });
 
 const ACTIVE_SHOPIFY_SHOPS = {};
+
+// parser._transform = function (data, encoding, done) {
+//   let str = data.toString();
+//   str = str.replace("<html>", "<!-- Begin stream -->\n<html>");
+
+//   this.push(str);
+//   done();
+// };
 
 //GET PRODUCT
 router.get("/stores", async (req, res) => {
@@ -98,7 +112,41 @@ router.get("/all", async (req, res) => {
 router.get("/", async (req, res) => {
   if (ACTIVE_SHOPIFY_SHOPS[req.query.shop] === undefined) {
     // not logged in, redirect to login
-    res.redirect(`/api/shopify/auth?shop=${req.query.shop}`);
+    const html = `
+    <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <h2>Node JS Submit Form with Express Js - RemoteStack.io</h2>
+      <form action="/api/shopify/platform" method="POST">
+          <div class="form-group mb-3">
+          <input hidden type="text" value='${req.query.shop}' class="form-control" placeholder="shop" name="shop">
+        </div>
+        <div class="form-group mb-3">
+          <label>Platform Domaine</label>
+          <input type="text" class="form-control"  placeholder="Platform" name="platform">
+        </div>
+
+        <div class="d-grid mt-3">
+        <button type="submit" class="btn btn-danger">Submit</button>
+        </div>
+      </form>
+  </body>
+</html>`;
+    var fileName = __dirname + "/form.html";
+    fs.readFile(fileName, function (err, data) {
+      // res.writeHead(200, { "Content-Type": "text/html" });
+      res.write(html);
+      res.end();
+      // return res.send(fileName);
+    });
+    // res.redirect(`/api/shopify/auth?shop=${req.query.shop}`);
     // console.log("store not found", req.query);
   } else {
     res.send("Hello world!");
@@ -106,12 +154,23 @@ router.get("/", async (req, res) => {
     res.end();
   }
 });
+
+router.post("/platform", encodeUrl, (req, res) => {
+  // console.log(req.body.shop);
+  if (ACTIVE_SHOPIFY_SHOPS[req.body.shop] === undefined) {
+    res.redirect(
+      `/api/shopify/auth?shop=${req.body.shop}&platform=${req.body.platform}`
+    );
+  } else {
+    res.send("Hello world!");
+  }
+});
 router.get("/auth", async (req, res) => {
   let authRoute = await Shopify.Auth.beginAuth(
     req,
     res,
     req.query.shop,
-    "/api/shopify/auth/callback", //+ req.query.shop,
+    "/api/shopify/auth/callback" + req.query.platform,
     false
   );
   // console.log(req.query.shop);
@@ -131,22 +190,22 @@ router.get("/auth/callback", async (req, res) => {
     console.log("session", session);
     const sendIt = await axios({
       method: "post",
-      url: "https://" + session.shop + "/api/shopify/new",
+      url: "https://" + req.query.platform + "/api/shopify/new",
       data: {
         session,
       },
     });
     console.log(sendIt.data);
-    // const addtodb = new Stores({
-    //   shop: session.shop,
-    //   accessToken: session.accessToken,
-    // });
-    // await addtodb.save();
+    const addtodb = new Stores({
+      shop: session.shop,
+      accessToken: session.accessToken,
+    });
+    await addtodb.save();
   } catch (error) {
     console.error(error); // in practice these should be handled more gracefully
   }
   return res.redirect(
-    `/api/shopify?host=${req.query.host}&shop=${req.query.shop}`
+    `/api/shopify?host=${req.query.host}&shop=${req.query.shop}&platform=${req.query.platform}`
   ); // wherever you want your user to end up after OAuth completes
 });
 
