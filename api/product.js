@@ -157,13 +157,13 @@ router.get("/", async (req, res) => {
 
 router.post("/platform", encodeUrl, (req, res) => {
   console.log(req.body);
-  if (ACTIVE_SHOPIFY_SHOPS[req.body.shop] === undefined) {
-    console.log("store not found", req.body.platform);
-    const inurl = req.body.platform;
-    res.redirect(`/api/shopify/${inurl}/auth?shop=${req.body.shop}`);
-  } else {
-    res.send("Hello world!");
-  }
+  // if (ACTIVE_SHOPIFY_SHOPS[req.body.shop] === undefined) {
+  console.log("store not found", req.body.platform);
+  const inurl = req.body.platform;
+  res.redirect(`/api/shopify/${inurl}/auth?shop=${req.body.shop}`);
+  // } else {
+  //   res.send("Hello world!");
+  // }
 });
 let bla;
 router.get("/:plat/auth", async (req, res) => {
