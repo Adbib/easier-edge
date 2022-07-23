@@ -160,7 +160,7 @@ router.post("/platform", encodeUrl, (req, res) => {
   if (ACTIVE_SHOPIFY_SHOPS[req.body.shop] === undefined) {
     console.log("store not found", req.body.platform);
     const inurl = req.body.platform;
-    res.redirect(`/api/shopify/${inurl}/auth`);
+    res.redirect(`/api/shopify/${inurl}/auth?shop=${req.body.shop}`);
   } else {
     res.send("Hello world!");
   }
