@@ -165,14 +165,16 @@ router.post("/platform", encodeUrl, (req, res) => {
     res.send("Hello world!");
   }
 });
+let bla;
 router.get("/:plat/auth", async (req, res) => {
   // console.log("query", req.query);
   // console.log("params", req.params);
+  bla = req.params.plat;
   let authRoute = await Shopify.Auth.beginAuth(
     req,
     res,
     req.query.shop,
-    `/api/shopify/auth/${req.params.plat}/callback`,
+    `/api/shopify/auth/callback`,
     false
   );
   console.log("authRoute", authRoute);
@@ -180,7 +182,7 @@ router.get("/:plat/auth", async (req, res) => {
   // console.log(authRoute);
   return res.redirect(authRoute);
 });
-router.get("/auth/:plat/callback", async (req, res) => {
+router.get("/auth/callback", async (req, res) => {
   console.log("callback", req.query);
   //   console.log("store not found", req.query);
 
@@ -194,7 +196,7 @@ router.get("/auth/:plat/callback", async (req, res) => {
     console.log("session", session);
     const sendIt = await axios({
       method: "post",
-      url: "https://" + req.params.plat + "/api/shopify/new",
+      url: "https://" + bla + "/api/shopify/new",
       data: {
         session,
       },
@@ -209,7 +211,7 @@ router.get("/auth/:plat/callback", async (req, res) => {
     console.error(error); // in practice these should be handled more gracefully
   }
   return res.redirect(
-    `/api/shopify?host=${req.query.host}&shop=${req.query.shop}&platform=${req.params.platform}`
+    `/api/shopify?host=${req.query.host}&shop=${req.query.shop}&platform=${bla}`
   ); // wherever you want your user to end up after OAuth completes
 });
 
