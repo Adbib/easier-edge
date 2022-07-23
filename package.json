@@ -1,0 +1,28 @@
+{
+  "name": "easier-vercel",
+  "version": "1.0.0",
+  "description": "Easier App Engine deployment",
+  "main": "index.js",
+  "engines": {
+    "node": "16.x"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Adbib/easier-edge.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Adbib/easier-edge/issues"
+  },
+  "homepage": "https://github.com/Adbib/easier-edge.git#readme",
+  "dependencies": {
+    "@shopify/shopify-api": "^4.2.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.1"
+  }
+}
