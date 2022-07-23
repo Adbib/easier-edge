@@ -158,9 +158,7 @@ router.get("/", async (req, res) => {
 router.post("/platform", encodeUrl, (req, res) => {
   // console.log(req.body.shop);
   if (ACTIVE_SHOPIFY_SHOPS[req.body.shop] === undefined) {
-    res.redirect(
-      `/api/shopify/${$req.body.platform}/auth`
-    );
+    res.redirect(`/api/shopify/${req.body.platform}/auth`);
   } else {
     res.send("Hello world!");
   }
