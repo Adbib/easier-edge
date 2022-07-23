@@ -172,7 +172,7 @@ router.get("/:plat/auth", async (req, res) => {
     req,
     res,
     req.query.shop,
-    `/api/shopify/auth/callback/${req.params.plat}`,
+    `/api/shopify/auth/${req.params.plat}/callback/`,
     false
   );
   console.log("authRoute", authRoute);
@@ -180,7 +180,7 @@ router.get("/:plat/auth", async (req, res) => {
   // console.log(authRoute);
   return res.redirect(authRoute);
 });
-router.get("/auth/callback/:plat", async (req, res) => {
+router.get("/auth/:plat/callback", async (req, res) => {
   console.log("callback", req.query);
   //   console.log("store not found", req.query);
 
