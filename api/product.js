@@ -172,14 +172,14 @@ router.get("/:plat/auth", async (req, res) => {
     req,
     res,
     req.query.shop,
-    "/api/shopify/auth/callback?platform=" + req.params.plat,
+    "/api/shopify/auth/callback/" + req.params.plat,
     false
   );
   // console.log(req.query.shop);
   // console.log(authRoute);
   return res.redirect(authRoute);
 });
-router.get("/auth/callback", async (req, res) => {
+router.get("/auth/callback/:plat", async (req, res) => {
   //   console.log("store not found", req.query);
 
   try {
@@ -192,7 +192,7 @@ router.get("/auth/callback", async (req, res) => {
     console.log("session", session);
     const sendIt = await axios({
       method: "post",
-      url: "https://" + req.query.platform + "/api/shopify/new",
+      url: "https://" + req.params.plat + "/api/shopify/new",
       data: {
         session,
       },
