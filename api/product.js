@@ -112,7 +112,7 @@ router.get("/all", async (req, res) => {
 router.get("/", async (req, res) => {
   if (ACTIVE_SHOPIFY_SHOPS[req.query.shop] === undefined) {
     // not logged in, redirect to login
-    const html = `
+    const html = ` 
     <!DOCTYPE html>
 <html lang="en">
   <head>
