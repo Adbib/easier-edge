@@ -6,6 +6,7 @@ const {
   LATEST_API_VERSION,
 } = require("@shopify/shopify-api");
 var fs = require("fs");
+const axios = require("axios");
 // const {
 //   verifyToken,
 //   verifyTokenAndAuthorization,
