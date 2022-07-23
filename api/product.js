@@ -172,7 +172,7 @@ router.get("/:plat/auth", async (req, res) => {
     req,
     res,
     req.query.shop,
-    "/api/shopify/auth/callback?platform" + req.params.plat,
+    "/api/shopify/auth/callback?platform=" + req.params.plat,
     false
   );
   // console.log(req.query.shop);
