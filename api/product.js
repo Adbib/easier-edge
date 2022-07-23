@@ -172,7 +172,7 @@ router.get("/:plat/auth", async (req, res) => {
     req,
     res,
     req.query.shop,
-    `/api/shopify/auth/${req.params.plat}/callback/`,
+    `/api/shopify/auth/${req.params.plat}/callback`,
     false
   );
   console.log("authRoute", authRoute);
