@@ -166,13 +166,13 @@ router.post("/platform", encodeUrl, (req, res) => {
   }
 });
 router.get("/:plat/auth", async (req, res) => {
-  console.log("query", req.query);
-  console.log("params", req.params);
+  // console.log("query", req.query);
+  // console.log("params", req.params);
   let authRoute = await Shopify.Auth.beginAuth(
     req,
     res,
     req.query.shop,
-    "/api/shopify/auth/callback/" + req.params.plat,
+    `/api/shopify/auth/callback/${req.params.plat}`,
     false
   );
   // console.log(req.query.shop);
@@ -180,6 +180,7 @@ router.get("/:plat/auth", async (req, res) => {
   return res.redirect(authRoute);
 });
 router.get("/auth/callback/:plat", async (req, res) => {
+  console.log("callback", req.query);
   //   console.log("store not found", req.query);
 
   try {
@@ -207,7 +208,7 @@ router.get("/auth/callback/:plat", async (req, res) => {
     console.error(error); // in practice these should be handled more gracefully
   }
   return res.redirect(
-    `/api/shopify?host=${req.query.host}&shop=${req.query.shop}&platform=${req.query.platform}`
+    `/api/shopify?host=${req.query.host}&shop=${req.query.shop}&platform=${req.params.platform}`
   ); // wherever you want your user to end up after OAuth completes
 });
 
